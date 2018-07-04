@@ -14,6 +14,9 @@ The purpose of this repository is to have explicit some guidelines when dealing 
     - [Flat control flow](#flat-control-flow)
     - [Code should be beautiful](#code-should-be-beautiful)
     - [Middleware handling](#middleware-handling)
+    - [Pass the props](#pass-the-props)
+    - [Composable elements](#composable-elements)
+    - [Functional component vs class component](#functional-component-vs-class-component)
     - [Declarative programing in React](#declarative-programing-in-react)
 
 ---
@@ -328,6 +331,221 @@ return ctx.render({
 ### Middleware handling
 
 TODO
+
+### Pass the props
+
+When creating a component, **always** pass the `...props`. Otherwise this can be frustrating to other dev trying to extend the component and realizing that nothing happens and he/she must spend time debugging your mistake.
+
+```js
+import React, { Component } from "react";
+import styled from "styled-components";
+
+// Will omit prop-types in this example.
+
+const AvatarCircle = styled.div`
+  ...
+`;
+const AvatarImage = styled.img`
+  ...
+`;
+
+// BAD, remember
+const Avatar = ({ user }) => (
+  <AvatarCircle>
+    <AvatarImage src={user["profile_image_url"]} />
+  </AvatarCircle>
+);
+// THIS WILL NOT STYLE THE COMPONENT!
+const SquaredAvatar = style(Avatar)`
+  ...
+`;
+// Bad usage example
+class MyComponent extends Component {
+  render() {
+    // BAD, you are not passing the ...props
+    const { user } = this.props;
+    return (
+      <div>
+        // Props `style` & `className` will not working (neither styled-components)
+        // ALSO BAD, do you really need to pass the whole `user` object as prop?
+        <Avatar user={user} style={} className="something" />
+        <SquaredAvatar user={user} style={} className="something-2" />
+      </div>
+    )
+  }
+}
+
+// BAD-ish, see next section.
+const Avatar = ({ image, ...props }) => (
+  <AvatarCircle {...props}>
+    <AvatarImage src={image} />
+  </AvatarCircle>
+);
+// Will work, but you are only styling the outer `div`.
+const SquaredAvatar = style(Avatar)`
+  ...
+`;
+// Usage example
+class MyComponent extends Component {
+  render() {
+    const { user, ...props } = this.props;
+    return (
+      <div {...props}>
+        <Avatar image={user["profile_image_url"]} />
+        <SquaredAvatar image={user["profile_image_url"]} />
+      </div>
+    )
+  }
+}
+
+/**
+ * CAN WE IMPROVE THIS? YES! Read "Composable elements" section
+ */
+```
+
+> Read the [Composable elements](#composable-elements) next.
+
+### Composable elements
+
+> Read the [Pass the props](#pass-the-props) section first.
+
+Want to create a sharable and re-usable component? Do not create an actual `React.Component` not `React.PureComponent` neither a `const Component = () => < />` component. **Create only styled-components**.
+
+Because you will end over-propping your component.
+
+**Just expose it's parts and let the developer compose and override the component part styles.**
+
+> Example: I want to be able to style the inner `img` component and the outer `div` and also be able to add a child component.
+
+```js
+// BAD, and it's not a joke. It's a 200 LOC component.
+const Avatar = ({
+    image,
+    innerClassname,
+    innerStyle,
+    innerProps,
+    outerProps,
+    width,
+    height,
+    margin,
+    noPadding,
+    isCircle,
+    renderChildren,
+    children,
+    renderChildrenFirst,
+    ...props
+  }) => {
+    let child = [];
+    if (renderChildrenFirst) {
+      if (renderChildren) {
+        child.push(renderChildren());
+      }
+      if (children) {
+        child.push(children);
+      }
+    } else {
+      if (children) {
+        child.push(children);
+      }
+      if (renderChildren) {
+        child.push(renderChildren());
+      }
+    }
+    const OuterComponent = isCircle ? AvatarCircle : styled(AvatarSquare)`
+      ...
+    `;
+    // ...
+    return (
+      <OuterComponent noPadding width={width} height={isCircle ? width : height} {...outerProps} {...props}>
+        <AvatarImage isSquare={!isCircle} noPadding className={innerClassname} style={innerStyle} src={image} {...innerProps} />
+      </OuterComponent>
+    );
+};
+
+// PERFECT, don't create nested Avatar component. Just it's parts
+const Avatar = styled.div`
+  ...
+`;
+Avatar.Image = styled.img`
+  ...
+`;
+// PERFECT usage example
+class MyComponent extends Component {
+  render() {
+    const { user, ...props } = this.props;
+    return (
+      <div {...props}>
+        <Avatar>
+          <Avatar.Image src={user["profile_image_url"]} />
+        </Avatar>
+      </div>
+    )
+  }
+}
+
+// PERFECT extending the component without over-propping
+const AvatarSquare = Avatar.extend`
+  ...
+`;
+const AvatarImageSquare = Avatar.Image.extend`
+  ...
+`;
+// PERFECT Usage example
+class MyComponent extends Component {
+  render() {
+    const { user, ...props } = this.props;
+    return (
+      <div {...props}>
+        <AvatarSquare>
+          <AvatarImageSquare src={user["profile_image_url"]} />
+        </AvatarSquare>
+      </div>
+    )
+  }
+}
+```
+
+### Functional component vs class component
+
+Our style-guide enforces Functional Component over class-based components. But you are free to use class-based components when needed.
+
+```js
+// BAD, you are externalizing logic that corresponds to the component.
+const getUserIsLogged = (user) => {
+  return ...
+}
+const renderProfile = (user) => {
+  return ...
+}
+const MyComponent = ({ user, ...props }) => {
+  const isLogged = getUserIsLogged(user);
+  const profile = renderProfile(user);
+  return (
+    ...
+  );
+}
+
+// GOOD-ish, but please read the `Declarative programing in React` section.
+class MyComponent extends Component {
+  static isUserLogged = user => {
+    return ...;
+  };
+
+  renderProfile(user) {
+    //
+  }
+
+  render() {
+    const isPrime = isNumberPrime(42);
+    return ...;
+  }
+}
+
+// GOOD, it's a Javascript or global thing and not related to the component.
+const isNumberPrime = number => {};
+```
+
+> Please read the [Declarative programing in React](#declarative-programing-in-react) next.
 
 ### Declarative programing in React
 
