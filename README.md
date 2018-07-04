@@ -405,7 +405,7 @@ class App extends Component {
   }
 }
 
-// GOOD, declarative and kind-of-functional method (do not rely on state)
+// GOOD-ish, declarative and kind-of-functional method (do not rely on state)
 class App extends Component {
   state = {
     loading: false,
@@ -421,6 +421,24 @@ class App extends Component {
     return (
       <div {...this.props}> // this good boi do not forget about props.
         {this.renderView(this.state.loading)}
+      </div>
+    )
+  }
+}
+
+// PLEASE NO, don't create variables for components, makes the render method harder to read.
+class App extends Component {
+  state = {
+    loading: false,
+  };
+  render() {
+    const hardToRead = this.state.loading ?  <Loading /> : <MyComponent />;
+
+    // ...
+
+    return (
+      <div {...this.props}> // this good boi do not forget about props.
+        {hardToRead}
       </div>
     )
   }
@@ -445,14 +463,14 @@ class App extends Component {
 }
 
 
-// GOOD & AWESOME!, Are you going to re-use the `MyComponent`? Probably not. Just inline it.
+// PERFECT, Are you going to re-use the `MyComponent`? Probably not. Just inline it.
 class App extends Component {
   state = {
     loading: false,
   };
   render() {
     // It's not bad having a big render method.
-    // Remember HTML files? Those we big.
+    // Remember HTML files? Those were big.
     // But you understand the big picture reading line-by-line without need to move your attention to methods.
     return (
       <div {...this.props}> // this good boi do not forget about props.
