@@ -345,7 +345,7 @@ import styled, { css } from "styled-components";
 // BAD, complex to understand
 const CommentBox = styled.div`
   border-color: white;
-  color: ${props => props.disabled ? "grey" : props.highlight ? "yellow" : "white"};
+  color: ${props => props.locked ? "grey" : props.highlight ? "yellow" : "white"};
   text-transform: ${props => props.highlight ? "uppercase" : undefined};
   background-color: ${props => props.highlight ? "white" : "inherit"};
 `;
@@ -353,15 +353,15 @@ const CommentBox = styled.div`
 // BAD, use the interpolation to add css `values;`, not css property `key: value;`
 const CommentBox = styled.div`
   border-color: white;
-  ${props => props.disabled && `color: red;`}; // BAD
+  ${props => props.locked && `color: red;`}; // BAD
 `;
 
 // GOOD
 const CommentBox = styled.div`
   border-color: white;
-  color: ${props => props.disabled ? "grey" : "white"};
+  color: ${props => props.locked ? "grey" : "white"};
   ${props => props.highlight && css`
-    color: ${props => props.disabled ? "grey" : "yellow"};
+    color: ${props => props.locked ? "grey" : "yellow"};
     text-transform: uppercase;
     background-color: white;
   `};
@@ -371,11 +371,11 @@ const CommentBox = styled.div`
 const CommentBox = styled.div`
   border-color: white;
   ...
-  ${props => props.highlight && props.disabled && css`
+  ${props => props.highlight && props.locked && css`
     color: grey;
     ...
   `};
-  ${props => props.highlight && !props.disabled && css`
+  ${props => props.highlight && !props.locked && css`
     color: yellow;
     ...
   `};
