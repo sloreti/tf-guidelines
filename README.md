@@ -1,6 +1,6 @@
 # tf-guidelines
 
-> Programing wisdom quotes were took from https://twitter.com/codewisdom
+> Programing wisdom quotes were took from [twitter.com/codewisdom](https://twitter.com/codewisdom).
 
 The purpose of this repository is to have explicit some guidelines when dealing with starting projects and how to code with a mindset that will help us in the future. Here are some rules that linters like ESLint or PEP8 can not recognize but as humans we need to he aware that coding is designing a system and a good design prevents errors.
 
@@ -14,6 +14,7 @@ The purpose of this repository is to have explicit some guidelines when dealing 
     - [Flat control flow](#flat-control-flow)
     - [Code should be beautiful](#code-should-be-beautiful)
     - [Middleware handling](#middleware-handling)
+    - [styled-components usage](#styled-components-usage)
     - [Pass the props](#pass-the-props)
     - [Composable elements](#composable-elements)
     - [Functional component vs class component](#functional-component-vs-class-component)
@@ -332,7 +333,52 @@ return ctx.render({
 
 TODO
 
+### styled-components usage
+
+> “Code is like humor. When you have to explain it, it’s bad.” – Cory House
+
+When a prop changes so many styles, group them with `css` instead of using complex ternary operations.
+
+```js
+import styled, { css } from "styled-components";
+
+// BAD, complex to understand
+const CommentBox = styled.div`
+  border-color: white;
+  color: ${props => props.disabled ? "grey" : props.highlight ? "yellow" : "white"};
+  text-transform: ${props => props.highlight ? "uppercase" : undefined};
+  background-color: ${props => props.highlight ? "white" : "inherit"};
+`;
+
+// GOOD
+const CommentBox = styled.div`
+  border-color: white;
+  color: ${props => props.disabled ? "grey" : "white"};
+  ${props => props.highlight && css`
+    color: ${props => props.disabled ? "grey" : "yellow"};
+    text-transform: uppercase;
+    background-color: white;
+  `};
+`;
+
+// GOOD if the styled-component gets bigger.
+const CommentBox = styled.div`
+  border-color: white;
+  ...
+  ${props => props.highlight && props.disabled && css`
+    color: grey;
+    ...
+  `};
+  ${props => props.highlight && !props.disabled && css`
+    color: yellow;
+    ...
+  `};
+`;
+```
+
 ### Pass the props
+
+> "Make it correct, make it clear, make it concise, make it fast. In that order." – Wes Dyer
 
 When creating a component, **always** pass the `...props`. Otherwise this can be frustrating to other dev trying to extend the component and realizing that nothing happens and he/she must spend time debugging your mistake.
 
