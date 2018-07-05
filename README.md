@@ -15,6 +15,9 @@ The purpose of this repository is to have explicit some guidelines when dealing 
     - [Code should be beautiful](#code-should-be-beautiful)
     - [Middleware handling](#middleware-handling)
     - [styled-components usage](#styled-components-usage)
+    - [styled-components extending](#styled-components-extending)
+    - [styled-components nesting](#styled-components-nesting)
+    - [styled-components prefixing](#styled-components-prefixing)
     - [Pass the props](#pass-the-props)
     - [Composable elements](#composable-elements)
     - [Functional component vs class component](#functional-component-vs-class-component)
@@ -381,6 +384,66 @@ const CommentBox = styled.div`
   `};
 `;
 ```
+
+### styled-components extending
+
+If you are extending a styled-component, most of the time `Page.extend` is enough because doing `styled(Page)` will create a new stylesheet.
+
+```js
+import styled from "styled-components";
+
+const Arrow = styled.div`
+  ...
+`;
+
+// BAD
+const UpArrow = styled(Arrow)`
+  ...
+`;
+
+// GOOD
+const UpArrow = Arrow.extend`
+  ...
+`;
+```
+
+### styled-components nesting
+
+Avoid un-specific selectors.
+
+```js
+import styled from "styled-components";
+
+const Panel = styled.div`
+  ...
+`;
+
+const MyForm = styled.form`
+  ...
+`;
+
+// BAD
+const SignUpPanel = styled(Panel)`
+  color: red;
+  form {
+    color: white;
+  }
+`;
+
+// GOOD
+const SignUpPanel = Panel.extend`
+  color: red;
+  ${MyForm} {
+    color: white;
+  }
+`;
+```
+
+> There is only a special case when you should `styled(...)` instead of `.extend` to create an extra-stylesheet. Ask @lopezjurip or @wachunei.
+
+### styled-components prefixing
+
+Don't. See: [styled-components.com/docs/basics#getting-started](https://www.styled-components.com/docs/basics#getting-started).
 
 ### Pass the props
 
