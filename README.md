@@ -350,6 +350,12 @@ const CommentBox = styled.div`
   background-color: ${props => props.highlight ? "white" : "inherit"};
 `;
 
+// BAD, use the interpolation to add css `values;`, not css property `key: value;`
+const CommentBox = styled.div`
+  border-color: white;
+  ${props => props.disabled && `color: red;`}; // BAD
+`;
+
 // GOOD
 const CommentBox = styled.div`
   border-color: white;
