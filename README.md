@@ -34,27 +34,27 @@ When creating new projects complete the following checklist before starting to c
 - [ ] Follow the naming conventions.
   - GOOD: Platform repositories uses `tf-[name]` lowercase, so the new repository will be named `tf-cms`.
   - BAD: Break the convention with `TFCMS`, `tfcms`, or similar.
-- [ ] Create `.gitignore` for all the operating-systems (MacOS|Windows|Linux).
+- [ ] Create `.gitignore` and include the defaults for all operating systems (MacOS|Windows|Linux).
   - GOOD: Use https://www.gitignore.io/api/linux,macos,windows
 - [ ] Add the platform specific ignore blobs to `.gitignore` (VS Code, Node.js, Python, Go, etc).
   - GOOD: Use https://www.gitignore.io
 - [ ] **Setup the testing suite with at least one passing test**, to serve as a reference for future development.
-- [ ] Setup a code linter & formatter. This will help with the consistency of the code during its development.
+- [ ] Set up a code linter & formatter. This will help make code consistent during its development.
   - GOOD: Use [tokenfoundry/eslint-config](https://github.com/tokenfoundry/eslint-config).
-- [ ] If you need to expose a PORT do not collide with the port of the other projects.
-- [ ] Set the metadata information (`package.json`) versioning to `0.0.0`.
-- [ ] Create `README.md` with at least this information:
-  - [ ] Propuse of the repository and the relationship with the other repositories.
+- [ ] If you need to expose a PORT be sure to not collide with the port of other TF projects.
+- [ ] Set the metadata information (`package.json`) version to `0.0.0`.
+- [ ] Create a `README.md` with at least the following information:
+  - [ ] Purpose of the repository and how it relates to our other repositories.
   - [ ] Requirements like: Node.js >=8, Yarn, Docker 1.8, etc.
   - [ ] `bash`/`shell` command line code to clone the repository.
-  - [ ] The markdown output may be pretty and formated, but please use indentation lines, breaklines and write a beautiful markdown source code.
-  - [ ] Prefer having a `.env` file (please add it to `.gitignore`).
+  - [ ] The markdown output may be pretty and formatted, but please use indentation lines, breaklines and write a beautiful markdown source code.
+  - [ ] Having a `.env` file is okay and encouraged (Be sure to add it to `.gitignore`).
     - GOOD: Use `dotenv` packages for Node.js, find similar for other languages.
   - [ ] For each environment (_development_, _production_, _testing_, _ci_):
-    - [ ] Write the necessary environment variables. If the variable can be shared please inline in directly in the `README.md`, but private variables just leave it empty and write where/how to ask for that value.
+    - [ ] Include the necessary environment variables in the `README.md`. If it is safe for the variable to be shared, inline it directly in the `README.md`. For private variables (passwords, keys) leave it empty and include a note stating where/how to ask for that value.
     - [ ] Write the necessary commands to install and run the project.
-    - [ ] Write where to access the running application or where is the output.
-    - [ ] Write the common errors that may appear and how to fix it.
+    - [ ] Write where to access the running application or how to see its output.
+    - [ ] Write the common errors that may appear and how to fix them.
 
   ````md
   # tf-cms
