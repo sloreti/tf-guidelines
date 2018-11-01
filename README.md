@@ -1,8 +1,8 @@
 # tf-guidelines
 
-> Programing wisdom quotes were took from [twitter.com/codewisdom](https://twitter.com/codewisdom).
+> Programming quotes taken from [twitter.com/codewisdom](https://twitter.com/codewisdom).
 
-The purpose of this repository is to have explicit some guidelines when dealing with starting projects and how to code with a mindset that will help us in the future. Here are some rules that linters like ESLint or PEP8 can not recognize but as humans we need to he aware that coding is designing a system and a good design prevents errors.
+The purpose of this repository is to lay out explicit guidelines for starting new projects and coding with *maintainability* and *extensibility* in mind. It contains rules that linters like ESLint or PEP8 will not recognize, but we as humans need to be aware of. Coding is designing a system and good design prevents errors.
 
 - [tf-guidelines](#tf-guidelines)
   - [Starting new projects](#starting-new-projects)
@@ -29,17 +29,17 @@ The purpose of this repository is to have explicit some guidelines when dealing 
 
 > "Take care of your tools and they will take care of you."
 
-When creating new projects the following checklist should be completed before start coding the actual requirements and sharing the codebase with the team:
+When creating new projects complete the following checklist before starting to code the actual requirements and sharing the codebase with the team:
 
 - [ ] Follow the naming conventions.
   - GOOD: Platform repositories uses `tf-[name]` lowercase, so the new repository will be named `tf-cms`.
   - BAD: Break the convention with `TFCMS`, `tfcms`, or similar.
 - [ ] Create `.gitignore` for all the operating-systems (MacOS|Windows|Linux).
   - GOOD: Use https://www.gitignore.io/api/linux,macos,windows
-- [ ] Add to `.gitignore` the platform specific ignore blobs (Node.js, Python, Go, etc).
+- [ ] Add the platform specific ignore blobs to `.gitignore` (VS Code, Node.js, Python, Go, etc).
   - GOOD: Use https://www.gitignore.io
-- [ ] **Setup the testing suite with at least one passing test** so serves as reference for the future development.
-- [ ] Setup a code linter & formatter. This will help with the consistency of the code during it's development.
+- [ ] **Setup the testing suite with at least one passing test**, to serve as a reference for future development.
+- [ ] Setup a code linter & formatter. This will help with the consistency of the code during its development.
   - GOOD: Use [tokenfoundry/eslint-config](https://github.com/tokenfoundry/eslint-config).
 - [ ] If you need to expose a PORT do not collide with the port of the other projects.
 - [ ] Set the metadata information (`package.json`) versioning to `0.0.0`.
