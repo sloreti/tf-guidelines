@@ -15,7 +15,6 @@ The purpose of this repository is to lay out explicit guidelines for starting ne
     - [Code should be beautiful](#code-should-be-beautiful)
     - [Middleware handling](#middleware-handling)
     - [styled-components usage](#styled-components-usage)
-    - [styled-components extending](#styled-components-extending)
     - [styled-components nesting](#styled-components-nesting)
     - [styled-components prefixing](#styled-components-prefixing)
     - [Pass the props](#pass-the-props)
@@ -420,13 +419,15 @@ const SignUpPanel = styled(Panel)`
 
 ### styled-components prefixing
 
-Don't. See: [styled-components.com/docs/basics#getting-started](https://www.styled-components.com/docs/basics#getting-started).
+Don't. `styled-components` handles vendor prefixing automatically. See: [styled-components.com/docs/basics#getting-started](https://www.styled-components.com/docs/basics#getting-started).
 
 ### Pass the props
 
 > "Make it correct, make it clear, make it concise, make it fast. In that order." – Wes Dyer
 
-When creating a component, **always** pass the `...props`. Otherwise this can be frustrating to other dev trying to extend the component and realizing that nothing happens and he/she must spend time debugging your mistake.
+When defining a component, **always** pass the `...props`. Otherwise this can be frustrating to other dev trying to extend the component and realizing that nothing happens and he/she must spend time debugging your mistake.
+
+<!--- TODO: Can we majorly simplyify the accompanying examples? And this is a good practice because it allows us to extend the styles with styled-components? Still unclear on this one. -->
 
 ```js
 import React, { Component } from "react";
@@ -491,21 +492,17 @@ class MyComponent extends Component {
 }
 
 /**
- * CAN WE IMPROVE THIS? YES! Read "Composable elements" section
+ * CAN WE IMPROVE THIS? YES! Read "Composable elements" section below
  */
 ```
 
-> Read the [Composable elements](#composable-elements) next.
-
 ### Composable elements
 
-> Read the [Pass the props](#pass-the-props) section first.
+> Read the [Pass the props](#pass-the-props) section before continuing with this section.
 
-Want to create a sharable and re-usable component? Do not create an actual `React.Component` not `React.PureComponent` neither a `const Component = () => < />` component. **Create only styled-components**.
+Want to create a sharable and reusable component? Do not create a `React.Component`, `React.PureComponent`, or `const Component = () => < />` component. **Create only styled-components**. Otherwise it is very easy to end over-propping your component.
 
-Because you will end over-propping your component.
-
-**Just expose it's parts and let the developer compose and override the component part styles.**
+**Expose its parts and let the developer compose and override the component part styles.**
 
 > Example: I want to be able to style the inner `img` component and the outer `div` and also be able to add a child component.
 
@@ -576,10 +573,10 @@ class MyComponent extends Component {
 }
 
 // PERFECT extending the component without over-propping
-const AvatarSquare = Avatar.extend`
+const AvatarSquare = styled(Avatar)`
   ...
 `;
-const AvatarImageSquare = Avatar.Image.extend`
+const AvatarImageSquare = styled(Avatar.Image)`
   ...
 `;
 // PERFECT Usage example
@@ -599,7 +596,7 @@ class MyComponent extends Component {
 
 ### Functional component vs class component
 
-Our style-guide enforces Functional Component over class-based components. But you are free to use class-based components when needed.
+Our style guide prefers functional components over class based components, but you are free to use class based components when needed.
 
 ```js
 // BAD, you are externalizing logic that corresponds to the component.
@@ -617,7 +614,7 @@ const MyComponent = ({ user, ...props }) => {
   );
 }
 
-// GOOD-ish, but please read the `Declarative programing in React` section.
+// GOOD-ish, but please read the `Declarative programming in React` section.
 class MyComponent extends Component {
   static isUserLogged = user => {
     return ...;
@@ -637,11 +634,9 @@ class MyComponent extends Component {
 const isNumberPrime = number => {};
 ```
 
-> Please read the [Declarative programing in React](#declarative-programing-in-react) next.
+### Declarative programming in React
 
-### Declarative programing in React
-
-Avoid imperative programing in React. Props and methods should describe behavior and sould not force actions.
+Avoid imperative programming in React. Props and methods should describe behavior and should not force actions.
 
 ```js
 import React, { Component } from "react";
@@ -662,18 +657,10 @@ const Button = styled.button`
     color: ${props => props.disabled ? "grey" : "white"};
   }
 `;
-// GOOD, write prop types.
-Button.propTypes = {
-  disabled: PropTypes.bool,
-};
-// GOOD, add sane and explicit defaults.
-Button.defaultProps = {
-  disabled: false,
-};
 
 // ------------------------------------------------------------------
 
-// BAD, this is imperative
+// BAD, getView is imperative
 class App extends Component {
   state = {
     loading: false,
@@ -729,26 +716,26 @@ class App extends Component {
   }
   render() {
     return (
-      <div {...this.props}> // this good boi do not forget about props.
+      <div {...this.props}> // this good boi did not forget about props.
         {this.renderView(this.state.loading)}
       </div>
     )
   }
 }
 
-// PLEASE NO, don't create variables for components, makes the render method harder to read.
+// PLEASE NO, don't create variables for components, makes the render method hard to read.
 class App extends Component {
   state = {
     loading: false,
   };
   render() {
-    const hardToRead = this.state.loading ?  <Loading /> : <MyComponent />;
+    const componentContent = this.state.loading ?  <Loading /> : <MyComponent />;
 
     // ...
 
     return (
-      <div {...this.props}> // this good boi do not forget about props.
-        {hardToRead}
+      <div {...this.props}> // this good boi did not forget about props.
+        {componentContent}
       </div>
     )
   }
@@ -761,7 +748,7 @@ class App extends Component {
   };
   render() {
     return (
-      <div {...this.props}> // this good boi do not forget about props.
+      <div {...this.props}> // this good boi did not forget about props.
         {this.state.loading ? (
           <Loading />
         ) : (
