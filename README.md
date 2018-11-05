@@ -32,34 +32,35 @@ The purpose of this repository is to lay out explicit guidelines for starting ne
 When creating new projects complete the following checklist before starting to code the actual requirements and sharing the codebase with the team:
 
 - [ ] Follow the naming conventions.
-  - GOOD: Platform repositories uses `tf-[name]` lowercase, so the new repository will be named `tf-cms`.
+  - GOOD: Platform repositories uses `tf-[name]` lowercase, so the new repository will be named `tf-cms`. <!--- TODO: Change tf to foundry, or whatever we decide on -->
   - BAD: Break the convention with `TFCMS`, `tfcms`, or similar.
 - [ ] Create `.gitignore` and include the defaults for all operating systems (MacOS|Windows|Linux).
   - GOOD: Use https://www.gitignore.io/api/linux,macos,windows
 - [ ] Add the platform specific ignore blobs to `.gitignore` (VS Code, Node.js, Python, Go, etc).
   - GOOD: Use https://www.gitignore.io
-- [ ] **Setup the testing suite with at least one passing test**, to serve as a reference for future development.
-- [ ] Set up a code linter & formatter. This will help make code consistent during its development.
+- [ ] **Set up the testing suite with at least one passing test!** At least one is needed to serve as reference for future development.
+- [ ] Set up a code linter & formatter. This will help make code consistent throughout development.
   - GOOD: Use [tokenfoundry/eslint-config](https://github.com/tokenfoundry/eslint-config).
-- [ ] If you need to expose a PORT be sure to not collide with the port of other TF projects.
+- [ ] If you need to expose a port be sure to not collide with the port of any existing TF projects.
 - [ ] Set the metadata information (`package.json`) version to `0.0.0`.
 - [ ] Create a `README.md` with at least the following information:
   - [ ] Purpose of the repository and how it relates to our other repositories.
   - [ ] Requirements like: Node.js >=8, Yarn, Docker 1.8, etc.
-  - [ ] `bash`/`shell` command line code to clone the repository.
-  - [ ] The markdown output may be pretty and formatted, but please use indentation lines, breaklines and write a beautiful markdown source code.
-  - [ ] Having a `.env` file is okay and encouraged (Be sure to add it to `.gitignore`).
+  - [ ] `bash`/`shell` commands to clone the repository.
+  - [ ] Obviously the markdown output must be pretty and formatted, but please also use indentation and breaklines to have beautiful markdown source code as well.
+  - [ ] A `.env` file is okay and encouraged (Be sure to add it to `.gitignore`).
     - GOOD: Use `dotenv` packages for Node.js, find similar for other languages.
   - [ ] For each environment (_development_, _production_, _testing_, _ci_):
-    - [ ] Include the necessary environment variables in the `README.md`. If it is safe for the variable to be shared, inline it directly in the `README.md`. For private variables (passwords, keys) leave it empty and include a note stating where/how to ask for that value.
-    - [ ] Write the necessary commands to install and run the project.
-    - [ ] Write where to access the running application or how to see its output.
-    - [ ] Write the common errors that may appear and how to fix them.
+    - [ ] Include the necessary environment variables in the `README.md`. If it is safe for the variable to be shared, inline it directly in the `README.md`. For private variables (passwords, keys) leave it empty and include a note stating where/who to ask for that value.
+    - [ ] List the necessary commands to install and run the project.
+    - [ ] Include where to access the running application or how to see its output.
+    - [ ] Describe the common errors that may appear and how to fix them.
+
 
   ````md
   # tf-cms
 
-  Manage content for the [tf-frontend](https://github.com/tokenfoundry/tf-frontend) that can't be stored ia SQL database.
+  Manage content for [tf-frontend](https://github.com/tokenfoundry/tf-frontend) that can't be stored in a SQL database.
 
   ## Requirements
 
@@ -86,7 +87,6 @@ When creating new projects complete the following checklist before starting to c
 
   ## Development
 
-  Run:
   ```sh
   yarn run dev
   ```
@@ -114,39 +114,39 @@ When creating new projects complete the following checklist before starting to c
 
 ## Working with branches
 
-If the project plain text and doesn't involve team collaborations (like this), keep everything in `master` and create PRs as needed.
+If the project is plain text and doesn't require team collaboration (like this repo), keep everything in `master` and create PRs as needed.
 
-If the project is large and involves many people, the branching should be like:
+Otherwise, if the project is large and involves many people, the branching should be as follows:
 
-- `master` branch: is the current production build
-- `develop` branch: is the current staging build, this version should be stable enough.
-- `feature/[name]` branches: has work in progress (WIP) code that will eventually get **squashed and merged** into `develop`.
-- `feature/[name]-[subname]` branches has a subset of the work required for the main feature branch. This help the squad to collaborate and be able to track and review the team current progress and to identify problems beforehand.
-- `chore/[name]` branches has work related to the health and refactoring of the code.
-- `hotfix/[name]` branches has a correction of a detected bug.
+- `master` branch: the current production build
+- `develop` branch: the current staging build. This version should be considered stable.
+- `feature/[name]` branches: work in progress (WIP) code that will eventually get **squashed and merged** into `develop`.
+- `feature/[name]-[subname]` branches: for more complex features, a subset of the work required for the main feature branch. This help the team collaborate, track, and review current progress and identify problems before they arise.
+- `chore/[name]` branches: work that is refactoring or related to the health of the codebase.
+- `hotfix/[name]` branches: a correction to a detected bug.
 
-It's important to mention that it's good to have an opened PR even before the branch is done because allows the team to review the code and detect problems _a priori_.
+It is important to mention that it is good to have an open PR even before the branch is done because it allows the team to review the code and detect problems _a priori_. <!--- TODO: Question this -->
 
 ---
 
-## Programing recommendations
+## Programming recommendations
 
 > "The purpose of software engineering is to control complexity, not to create it."
 
-### Make use of the built-in features
+### Make use of built-in features
 
 > "Any program is only as good as it is useful." - Linus Torvalds
 
-It's common to try to write code fast and have features done with the current knowledge without questioning if what we know is correct or wrong.
+It is common to try to write code quickly with your existing knowledge of the problem.
 
-If you feel _"Why i'm writing something long that is very common to any software or language?"_, probably someone already have the solution.
+Before writing any code, ask yourself _"Is what I am going to write common to any software or language? Has someone before me likely encountered this same issue?"_, If the answer to either is yes, someone has probably already created a solution.
 
-Always research and you will end up writing fewer and better lines of code:
+Always research what tools and libraries are already out there and you will end up writing fewer and better lines of code:
 
 ```js
 const registrations = [];
 
-// BAD, six lines of inefficient code
+// BAD, six lines of code. Fewer will do
 const isApproved = true;
 for (var i = 0; i < registrations.length; i++) {
   if (registrations["approved"] === false) { // please use `!registrations["approved"]`
@@ -154,10 +154,10 @@ for (var i = 0; i < registrations.length; i++) {
   }
 }
 
-// BAD, works but not correctly semantic and hard to understand
+// BAD, works but not very semantic and hard to understand
 const isApproved = registrations.findIndex(r => !r["approved"]) > -1;
 
-// GOOD, awesome! clear and semantic, you don't need extra comments.
+// GOOD, awesome! clear and semantic; doesn't require comments
 const approved = registrations.every(r => r["approved"]);
 ```
 
@@ -165,50 +165,49 @@ const approved = registrations.every(r => r["approved"]);
 
 > "No abstraction is better than wrong abstraction."
 
-Sometimes we feel necessity of writting a _class_ or any abstraction when dealing with some repetitive task. This may lead to complexity problems when the abstraction is made incorrectly, so sometime it's better to copy-paste code instead of writing the wrong abstraction.
+Sometimes it may seem necessary to write a _class_ or abstraction when dealing with a repetitive task. This may lead to undue complexity, and risks introducing incorrect abstractions, so in some cases it is better just to repeat code or function calls.
 
-Also it's good for the developer to avoid traveling from function to function. Try to keep everything close where it is needed.
+Also it can prevent someone reading your code from having to jump from function to function. Try to keep everything close to where it is needed.
 
 ```js
 const keyBy = require("lodash/keyBy");
 
-// BAD: we don't need abstraction for everything.
-const getCreateBadIndexUsersBy = (users, id, name, insensitive) => {
+// BAD: We don't need abstraction for everything
+const createIndexUsersBy = (users, id, name, insensitive) => {
   let result = null;
   if (insensitive) {
     users = users.map(u => u.toLowerCase());
   }
-  // This function is a mess, i know. It is just an example.
   if (id || name) {
     result = id ? keyBy(users, id) : keyBy(users, name)
   }
   // ...
   return result;
 }
-const usersById = getCreateBadIndexUsersBy(users, "", null, false);
-const usersByName = getCreateBadIndexUsersBy(users, null, "name", false);
+const usersById = createIndexUsersBy(users, "", null, false);
+const usersByName = createIndexUsersBy(users, null, "name", false);
 
-// GOOD: it's clear and specific operations are handled by the developer.
+// GOOD: It's clear and specific operations are handled by the developer
 const usersById = keyBy(users, "id");
 const usersByName = keyBy(users.map(u => ... })), "name");
 ```
 
-### Object properties
+### Object properties in Javascript
 
 > "Explicit is better than implicit. Simple is better than complex, ..." -The Zen of Python
 
 In Javascript you have three ways of accessing object properties:
 
 1. `const { user } = this.props;`
-    - Use this when you need a 1-5 variables of the object and try to avoid renaming.
+    - Use this when you are accessing 1-5 variables of the object. Try to avoid renaming variables.
 2. `const user = this.props.user;`
 3. `const user = this.props["user"];`
-    - Use this when dealing with _external data_ as it were a JSON object (indeed is a JSON object so treat it like a JSON object, not a Javascript object).
+    - Use this syntax when dealing with _external data_, as if it were a JSON object (it likely came from a JSON object, so treat it as such).
 
-**Using `["brackets"]` for external data helps the developer understand that we are dealing with data we don't have control on**. Also it's clear that it's a JSON object and not a internal Javascript property or value.
+**Using `["brackets"]` for external data helps the developer understand that we are dealing with data we don't have control over**. Also it's clear that it's a JSON object and not an internal Javascript property or value.
 
 ```js
-// BAD, very long function, so many variables and are renamed.
+// BAD. Many lines of code and many variables are renamed.
 function something(user, project) {
   const {
     name: projectName,
@@ -219,7 +218,7 @@ function something(user, project) {
     last_name: lastName,
     age,
     ...
-  } = user; // is `user` an Javascript internal object or external data?
+  } = user; // is `user` a Javascript internal object or external data?
   return {
     naming: userName + " " + lastName,
     project: projectName,
@@ -233,7 +232,7 @@ function something(user, project) {
   return {
     naming: [user["name"], user["last_name"]].filter(Boolean).join(" "),
     project: project["name"],
-    age: Number(user["age"]), // never trust external data.
+    age: Number(user["age"]), // Never trust external data.
     ... // many other stuff
   }
 }
@@ -244,7 +243,7 @@ class App extends Component {
     user: PropTypes.object.isRequired,
   };
   render() {
-    // We know `user` is known because it's a prop.
+    // We know `user` is known because it's a required prop.
     const { user, project, ...props } = this.props;
     return (
       <div>
@@ -269,7 +268,7 @@ pass = true;
 if (user) {
   pass = true;
   if (user["data"]) {
-    if (user["data"]["key"] != "0x") { // BAD, use `!==` not `!=`
+    if (user["data"]["key"] !== "0x") {
       return "FALSE"; // BAD! make returns consistent
     }
   } else if (..) {
@@ -286,7 +285,7 @@ if (pass || !user || user && user["data"] || ...) {
   ...
 }
 
-// GOOD, plain control flow and add _firewalls_ so the "happy-path" return value is at the end.
+// GOOD, clear control flow and adds _firewalls_ so that the "happy-path" return value is at the end.
 if (!user) {
   return false;
 } else if (!user["data"]) {
@@ -302,18 +301,20 @@ if (!user) {
 
 > "Read other people's code and 'steal' the good parts. Even if you try to do things exactly like someone else, you'll fail, but in doing so create something that's truly your own."
 
-If you are feeling that you are writing some much code, it's probably because you are doing something wrong. Here some tips:
+If you are feeling that you are writing a lot of code, it's probably because you are doing something wrong. Here some tips:
 
-- Use less temporal or aux variables.
+- Avoid temporal or auxiliary variables.
 - Build mental maps or representations easy for humans.
 - Read the language documentation.
-- Prefer functional programing style rather than imperative.
+- Prefer functional programming styles to imperative.
 - Ask for help or recommendations.
 
-And finally, don't copy-paste code if you don't understand it first.
+<!--- TODO: This advice doesn't feel actionable to me -->
+
+And finally, don't copy & paste code if you don't understand it first.
 
 ```js
-// GOOD, easy to read and the best performance.
+// GOOD, easy to read and performant.
 const [
   { data: project },
   { data: registrations },
@@ -340,7 +341,7 @@ TODO
 
 > “Code is like humor. When you have to explain it, it’s bad.” – Cory House
 
-When a prop changes so many styles, group them with `css` instead of using complex ternary operations.
+When a prop changes many styles, group them with `css` instead of using complex ternary operations.
 
 ```js
 import styled, { css } from "styled-components";
@@ -385,31 +386,9 @@ const CommentBox = styled.div`
 `;
 ```
 
-### styled-components extending
-
-If you are extending a styled-component, most of the time `Page.extend` is enough because doing `styled(Page)` will create a new stylesheet.
-
-```js
-import styled from "styled-components";
-
-const Arrow = styled.div`
-  ...
-`;
-
-// BAD
-const UpArrow = styled(Arrow)`
-  ...
-`;
-
-// GOOD
-const UpArrow = Arrow.extend`
-  ...
-`;
-```
-
 ### styled-components nesting
 
-Avoid un-specific selectors.
+Avoid unspecific selectors.
 
 ```js
 import styled from "styled-components";
@@ -431,15 +410,13 @@ const SignUpPanel = styled(Panel)`
 `;
 
 // GOOD
-const SignUpPanel = Panel.extend`
+const SignUpPanel = styled(Panel)`
   color: red;
   ${MyForm} {
     color: white;
   }
 `;
 ```
-
-> There is only a special case when you should `styled(...)` instead of `.extend` to create an extra-stylesheet. Ask @lopezjurip or @wachunei.
 
 ### styled-components prefixing
 
