@@ -7,7 +7,7 @@ The purpose of this repository is to lay out explicit guidelines for starting ne
 - [tf-guidelines](#tf-guidelines)
   - [Starting new projects](#starting-new-projects)
   - [Working with branches](#working-with-branches)
-  - [Programing recommendations](#programing-recommendations)
+  - [Programming recommendations](#programming-recommendations)
     - [Make use of the built-in features](#make-use-of-the-built-in-features)
     - [Copypaste versus abstraction](#copypaste-versus-abstraction)
     - [Object properties](#object-properties)
@@ -20,7 +20,7 @@ The purpose of this repository is to lay out explicit guidelines for starting ne
     - [Pass the props](#pass-the-props)
     - [Composable elements](#composable-elements)
     - [Functional component vs class component](#functional-component-vs-class-component)
-    - [Declarative programing in React](#declarative-programing-in-react)
+    - [Declarative programming in React](#declarative-programming-in-react)
 
 ---
 
